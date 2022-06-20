@@ -6,10 +6,14 @@ on:
     branches: [ main ]
 
 env:
-  APP_FOLDER: VulnerableApp
+  APP_NAME: vulnerableapp
+  APP_FOLDER: VulnerableApp 
+  IMAGE_NAMESPACE: mboira_sysdig
+  IMAGE_REGISTRY: quay.io
+  
 
 jobs:
-  login:
+  login-build-push-deploy:
     runs-on: ubuntu-latest
     steps:
       -
@@ -32,3 +36,21 @@ jobs:
         name: Build with Gradle and Push
         working-directory: VulnerableApp
         run: ./gradlew jib
+
+      - 
+        name: OpenShift login
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          # openshift_username:
+          # openshift_password:
+          insecure_skip_tls_verify: true
+          namespace: ${{ env.IMAGE_NAMESPACE }}
+
+      - name: Create and expose app
+        uses: redhat-actions/oc-new-app@v1
+        with:
+          app_name: petclinic
+          image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
+          namespace: ${{ env.IMAGE_NAMESPACE }}
