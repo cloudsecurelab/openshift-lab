@@ -2,8 +2,12 @@
 name: Build and Push Image to Quay.io
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Tag for the image to be built'     
+        required: false
+        default: 'latest'
 
 env:
   APP_NAME: vulnerableapp
@@ -11,7 +15,6 @@ env:
   IMAGE_NAMESPACE: mboira_sysdig
   IMAGE_REGISTRY: quay.io
   CLUSTER_NAMESPACE: default
-  
 
 jobs:
   login-build-push-deploy:
@@ -49,7 +52,8 @@ jobs:
           insecure_skip_tls_verify: true
           namespace: ${{ env.IMAGE_NAMESPACE }}
 
-      - name: Create and expose app
+      - 
+        name: Create and expose app
         uses: redhat-actions/oc-new-app@v1
         with:
           app_name: ${{ env.APP_NAME }}
