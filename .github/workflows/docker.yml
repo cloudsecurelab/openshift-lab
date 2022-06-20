@@ -56,6 +56,6 @@ jobs:
         name: Create and expose app
         uses: redhat-actions/oc-new-app@v1
         with:
-          app_name: ${{ env.APP_NAME }}
+          app_name: ${{ env.APP_NAME }}-${{ steps.commit-data.outputs.short_sha }}
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
           namespace: ${{ env.CLUSTER_NAMESPACE }}
