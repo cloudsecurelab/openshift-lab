@@ -10,6 +10,7 @@ env:
   APP_FOLDER: VulnerableApp 
   IMAGE_NAMESPACE: mboira_sysdig
   IMAGE_REGISTRY: quay.io
+  CLUSTER_NAMESPACE: default
   
 
 jobs:
@@ -53,4 +54,4 @@ jobs:
         with:
           app_name: petclinic
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
-          namespace: ${{ env.IMAGE_NAMESPACE }}
+          namespace: ${{ env.CLUSTER_NAMESPACE }}
