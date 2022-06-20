@@ -30,5 +30,4 @@ jobs:
         run: chmod +x gradlew
       -
         name: Build with Gradle and Push
-        working-directory: ./VulnerableApp
         run: ./gradlew jib
