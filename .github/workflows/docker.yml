@@ -26,7 +26,9 @@ jobs:
           java-version: 1.8
       -
         name: Grant execute permission for gradlew
-        run: chmod +x $APP_FOLDER/gradlew
+        working-directory: ./$APP_FOLDER
+        run: chmod +x gradlew
       -
         name: Build with Gradle and Push
-        run: ./$APP_FOLDER/gradlew jib
+        working-directory: ./$APP_FOLDER
+        run: ./gradlew jib
