@@ -66,16 +66,3 @@ jobs:
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
           namespace: ${{ env.CLUSTER_NAMESPACE }}
           port: ${{ env.APP_PORT }}
-      - 
-        name: Echo application URL
-        env:
-          ROUTE: ${{ steps.create-and-expose.outputs.route }}
-          SELECTOR: ${{ steps.create-and-expose.outputs.selector }}
-        run: |
-          [[ -n ${{ env.ROUTE }} ]] || (echo "Determining application route failed in previous step"; exit 1)
-          echo
-          echo "======================== Application available at: ========================"
-          echo ${{ env.ROUTE }}
-          echo "==================================================================================="
-          echo
-          echo "Your app can be taken down with: \"oc delete all --selector='${{ env.SELECTOR }}'\""
