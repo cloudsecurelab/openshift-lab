@@ -17,11 +17,12 @@ env:
   CLUSTER_NAMESPACE: default
 
 jobs:
-  login-build-push-deploy:
+  cicd-pipeline:
     runs-on: ubuntu-latest
     steps:
       -
         name: Login to Quay.io
+        id: login-quay
         uses: docker/login-action@v2
         with:
           registry: quay.io
@@ -29,20 +30,23 @@ jobs:
           password: ${{ secrets.QUAY_TOKEN }}
       -
         name: Checkout new changes
+        id: checkout-changes-java
         uses: actions/checkout@v2
         with:
           java-version: 1.8
       -
         name: Grant execute permission for gradlew
+        id: grant-permissions-gradlew
         working-directory: ./VulnerableApp
         run: chmod +x gradlew
       -
         name: Build with Gradle and Push
+        id: build-and-push
         working-directory: VulnerableApp
         run: ./gradlew jib
-
       - 
         name: OpenShift login
+        id: openshift-login
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
@@ -51,11 +55,24 @@ jobs:
           # openshift_password:
           insecure_skip_tls_verify: true
           namespace: ${{ env.IMAGE_NAMESPACE }}
-
       - 
         name: Create and expose app
+        id: create-and-expose
         uses: redhat-actions/oc-new-app@v1
         with:
           app_name: ${{ env.APP_NAME }}-${{ steps.commit-data.outputs.short_sha }}
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
           namespace: ${{ env.CLUSTER_NAMESPACE }}
+      - 
+        name: Echo application URL
+        env:
+          ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
+          SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
+        run: |
+          [[ -n ${{ env.ROUTE }} ]] || (echo "Determining application route failed in previous step"; exit 1)
+          echo
+          echo "======================== Application available at: ========================"
+          echo ${{ env.ROUTE }}
+          echo "==================================================================================="
+          echo
+          echo "Your app can be taken down with: \"oc delete all --selector='${{ env.SELECTOR }}'\""
