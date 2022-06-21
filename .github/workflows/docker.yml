@@ -12,6 +12,7 @@ on:
 env:
   APP_NAME: vulnerableapp
   APP_FOLDER: VulnerableApp 
+  APP_PORT: 80
   IMAGE_NAMESPACE: mboira_sysdig
   IMAGE_REGISTRY: quay.io
   CLUSTER_NAMESPACE: default
@@ -63,6 +64,7 @@ jobs:
           app_name: ${{ env.APP_NAME }}
           image: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_NAMESPACE }}/${{ env.APP_NAME }}:latest
           namespace: ${{ env.CLUSTER_NAMESPACE }}
+          port: ${{ env.APP_PORT }}
       - 
         name: Echo application URL
         env:
