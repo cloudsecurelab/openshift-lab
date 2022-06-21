@@ -67,9 +67,9 @@ jib {
   	to {
     	  image = 'quay.io/mboira_sysdig/vulnerableapp:latest'
   	}
-    container {
+  	container {
     	  ports = ['9090']
-    }
+  	}
 }
 
 tasks.register('GenerateSampleVulnerability'){
