@@ -1,4 +1,4 @@
-buildscript {
+buildscript {j
     repositories {
         mavenCentral()
     }
@@ -67,6 +67,10 @@ jib {
   	to {
     	  image = 'quay.io/mboira_sysdig/vulnerableapp:latest'
   	}
+    container {
+          ports = ['9090']
+          format = 'OCI'
+    }
 }
 
 tasks.register('GenerateSampleVulnerability'){
