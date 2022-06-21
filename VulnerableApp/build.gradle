@@ -68,8 +68,7 @@ jib {
     	  image = 'quay.io/mboira_sysdig/vulnerableapp:latest'
   	}
     container {
-          ports = ['9090']
-          format = 'OCI'
+    	  ports = ['9090']
     }
 }
 
