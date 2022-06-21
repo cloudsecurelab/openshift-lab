@@ -69,8 +69,8 @@ jobs:
       - 
         name: Echo application URL
         env:
-          ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
-          SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
+          ROUTE: ${{ steps.create-and-expose.outputs.route }}
+          SELECTOR: ${{ steps.create-and-expose.outputs.selector }}
         run: |
           [[ -n ${{ env.ROUTE }} ]] || (echo "Determining application route failed in previous step"; exit 1)
           echo
