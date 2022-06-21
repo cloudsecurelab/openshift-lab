@@ -44,7 +44,7 @@ jobs:
         name: Build with Gradle and Push
         id: build-and-push
         working-directory: VulnerableApp
-        run: ./gradlew jib
+        run: ./gradlew jibDockerBuild
       - 
         name: OpenShift login
         id: openshift-login
